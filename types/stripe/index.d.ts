@@ -189,7 +189,7 @@ declare namespace Stripe {
              * account holder to setup a username and password, and handle all account
              * management directly with them. Possible values are custom and standard.
              */
-            type: 'custom' | 'standard';
+            type: "custom" | "standard";
         }
 
         interface IAccountShared {
@@ -716,6 +716,16 @@ declare namespace Stripe {
              * or "transfer_failure"
              */
             type?: string;
+            
+            /**
+             * For automatic Stripe payouts only, only returns transactions that were payed out on the specified payout ID. 
+             */
+            payout?: string;
+            
+            /**
+             * A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10.
+             */
+            limit?: number;
         }
     }
 
@@ -1322,7 +1332,7 @@ declare namespace Stripe {
             /**
              * ID of the default source attached to this customer. [Expandable]
              */
-            default_source: string | cards.ICard | bitcoinReceivers.IBitcoinReceiver;
+            default_source: string | cards.ICard | bitcoinReceivers.IBitcoinReceiver | null;
 
             /**
              * Whether or not the latest charge for the customer's latest invoice has failed
@@ -1340,7 +1350,7 @@ declare namespace Stripe {
 
             livemode: boolean;
 
-            metadata?: IMetadata;
+            metadata: IMetadata;
 
             /**
              * Shipping information associated with the customer.
@@ -1470,7 +1480,7 @@ declare namespace Stripe {
             source?: sources.ISourceCreationOptionsExtended;
         }
 
-        interface ICustomerListOptions extends IListOptionsCreated {            
+        interface ICustomerListOptions extends IListOptionsCreated {
             /**
              * A filter on the list based on the customer’s email field. The value must be a string.
              */
@@ -4347,7 +4357,7 @@ declare namespace Stripe {
             /**
              * Value is 'card'
              */
-            object: 'card';
+            object: "card";
 
             /**
              * The card number
@@ -4678,6 +4688,12 @@ declare namespace Stripe {
              * Integer representing the number of trial period days before the customer is charged for the first time.
              */
             trial_period_days?: number;
+
+            /**
+             * Indicates if a plan’s trial_period_days should be applied to the subscription. Setting trial_end per subscription is preferred,
+             * and this defaults to false. Setting this flag to true together with trial_end is not allowed.
+             */
+            trial_from_plan?: boolean;
 
             /**
              * List of subscription items, each with an attached plan.
@@ -5033,6 +5049,11 @@ declare namespace Stripe {
              * For other types of refunds, it can be pending, succeeded, failed, or canceled.
              */
             status: "pending" | "succeeded" | "failed" | "canceled";
+
+            /**
+             * If the refund failed, the reason for refund failure if known.
+             */
+            failure_reason?: "lost_or_stolen_card" | "expired_or_canceled_card" | "unknown";
         }
 
         interface IRefundCreationOptions extends IDataOptionsWithMetadata {
@@ -7181,7 +7202,7 @@ declare namespace Stripe {
         }
 
         class WebHooks {
-            constructEvent<T>(requestBody: any, signature: string | string[], endpointSecret: string): webhooks.StripeWebhookEvent<T>;
+            constructEvent<T>(requestBody: any, signature: string | string[], endpointSecret: string, tolerance?: number): webhooks.StripeWebhookEvent<T>;
         }
 
         class EphemeralKeys {

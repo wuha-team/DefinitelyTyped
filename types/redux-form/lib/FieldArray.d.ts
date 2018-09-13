@@ -34,6 +34,7 @@ interface FieldsProps<FieldValue> {
     forEach(callback: FieldIterate<FieldValue>): void;
     get(index: number): FieldValue;
     getAll(): FieldValue[];
+    removeAll(): void;
     insert(index: number, value: FieldValue): void;
     length: number;
     map<R>(callback: FieldIterate<FieldValue, R>): R[];
@@ -42,6 +43,7 @@ interface FieldsProps<FieldValue> {
     remove(index: number): void;
     shift(): FieldValue;
     swap(indexA: number, indexB: number): void;
+    move(from: number, to: number): void;
     unshift(value: FieldValue): void;
 }
 
